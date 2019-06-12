@@ -381,26 +381,6 @@ message.channel.send({embed:embed});
 }
 });
 
-client.on("ready", () => {
-    client.user.setPresence({
-      status: 'online',
-      game: { 
-         type: 0,
-         name: 'انطزرو شيعا قريبا',
-         details: `شيعا جاي يكسر الدنيا`,
-         url: 'http://twitch.tv/algamer998',
-         state: `شيعا الفخم جااي`,
-        application_id: '587595077694783488',
-         assets: {
-            small_image: `2`,
-            small_text: 'جاي' ,
-            large_image: `1`,
-            large_text: `شيعا` }
-    
-      }
-        });
-    });
- 
     var antispam = require("anti-spam");//npm i anti-spam
  
 antispam(client, {
