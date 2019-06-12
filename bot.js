@@ -12,7 +12,7 @@ client.on('ready', () => {
 });
 //
 client.on('message', message => {
-if (message.content.split(' ')[0] == '!bc')
+if (message.content.split(' ')[0] == '!ebc')
  message.guild.members.forEach( member => {
          if (!message.member.hasPermission("CONNECT"))  return;
 member.send( `${member} ! ` + "**" + message.guild.name + " : ** " + message.content.substr(3));
