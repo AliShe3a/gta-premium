@@ -614,7 +614,7 @@ client.on('message', async rokz => {
  
       let fillter = m => m.author.id === rokz.author.id
  
-      await rokz.channel.send("اسمك ؟").then(e => {
+      await rokz.channel.send("اسمك !؟").then(e => {
  
      rokz.channel.awaitMessages(fillter, { time: 60000, max: 1 })
  
