@@ -993,4 +993,4 @@ client.on("reachLimit", (limit)=> {
 });
 
 
-client.login("NTg4NDM1NzQ2MzQ0NTM0MDU2.XQFFhQ.efuF-cUvZtlAnf3s_8kH0zOEU-w");
+client.login("token");
