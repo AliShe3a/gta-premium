@@ -1,83 +1,56 @@
-/* backup code by IiKaReeeM#0001 
-* copy right codes
-*/
-
-
-const Discord = require('discord.js')
-const bot = new Discord.Client()
-const db = require('quick.db') // لا تنسى تحمل البكج ذا , npm i quick.db@7.0.0-b22
-const prefix = "@" // تقدر تغيره
-// ذا كود الباك اب
-bot.on('message', msg => {
-  if(msg.author.bot) return
-  if(msg.content.startsWith(prefix + 'backup')) {
-    db.set(`backup.${msg.author.id}.channels`, [])
-    db.set(`backup.${msg.author.id}.roles`, [])
-    db.set(`backup.${msg.author.id}.categories`, [])
-    let channels = msg.guild.channels.filter(c => c.type === 'text')
-    let categories = msg.guild.channels.filter(c => c.type === 'category')
-    channels.forEach(c => {
-      db.push(`backup.${msg.author.id}.channels`, {cn: c.name, ccn: c.parent.name})
-
-    })
-    categories.forEach(c => {
-      db.push(`backup.${msg.author.id}.categories`, c.name)
-
-    })
-
-    msg.guild.roles.forEach(r => {
-      if(r.name === '@everyone') return
-      db.push(`backup.${msg.author.id}.roles`, {rn: r.name, rc: r.color, rp: r.permissions})
-    })
-
-    msg.channel.send(`**Done backup this server**`)
-
-  }
-})
-
-bot.on('ready', () => {
-  console.log(`backup code by IiKaReeeM#0001`)
-})
-
-
-// وذا كود اللود load 
-bot.on('message', msg => {
-  if(msg.author.bot) return
-  if(msg.content.startsWith(prefix + 'load')) {
-   let channels = db.get(`backup.${msg.author.id}.channels`)
-   let roles = db.get(`backup.${msg.author.id}.roles`)
-   let categories = db.get(`backup.${msg.author.id}.categories`)
-   if(channels === null && roles === null && categories === null) return msg.channel.send(`**You don't have a backup to be uploaded here.  :/**`)
-   msg.channel.send(`**loading...**`).then(m => {
-     setTimeout(() => {
-                    m.edit(`**done load!**`)
-                  },6000);
-                })
-
-if(categories != null) {
-   for(let j = 0; j < categories.length; j++) {
-     msg.guild.createChannel(categories[j], "category")
-   }
-}
-if(roles != null) {
-for(let r = 0; r < roles.length; r++) {
- msg.guild.createRole({
-   name: roles[r].rn,
-   color: roles[r].rc,
-   permissions: roles[r].rp
- })
-}
-}
-if(channels != null) {
-
-   for(let i = 0; i < channels.length; i++) {
-     msg.guild.createChannel(channels[i].cn, "text").then(channel => {
-       channel.setParent(msg.guild.channels.find(c => c.name == channels[i].ccn))
-     })
-}
-}
-  }
-})
-
-
-bot.login('NTEzMDg2MjcwOTE0NjkxMDcz.XRKKRQ.1ec50_VPeiXIN5U1ZJpAA82_1F4')
+"use strict";
+const Discord = require('discord.js');
+const client = new Discord.Client();
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}`)
+});
+client.on('message', message => {
+    const prefix = "@";
+    const args = message.content.trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
+    if (command == `${prefix}vote`) {
+        let mentioned = message.mentions.users.first();
+        if (!mentioned) return message.reply("اين المنشن ي غلام")
+        const array = ["1", "2", "3", "4", "5"]
+        const embed = new Discord.RichEmbed()
+            .addField('الرجاء التصويت حسب جودة الخدمة المقدمة اليك', `1 - راضي جداً\n2-راضي\n3- لا بأس\n4- غير راضي\n5- سيء جداً\n\nالرجاء الأختيار من الرقم 1 الى 5\nوبدون اضافة اي كلام اخر\n اضافة اي كلام غير ال ارقام سوف يلغي التصويت`)
+        mentioned.send(embed);
+        const filter = m => m.author.id === mentioned.id && array.some(answer => answer.toLowerCase() == m.content.toLowerCase());
+        client.users.get(mentioned.id).createDM().then(channel => {
+            channel.awaitMessages(filter, {
+                maxMatches: 1,
+                errors: ['time'],
+                time: 60000
+            }).then(collected => {
+                const answer = collected.first().content;
+                var hi;
+                switch (answer) {
+                    case "1":
+                        hi = "راضي جداً"
+                        break;
+                    case "2":
+                        hi = "راضي"
+                        break;
+                    case "3":
+                        hi = "لا بأس"
+                        break;
+                    case "4":
+                        hi = "غير راضي"
+                        break;
+                    case "5":
+                        hi = "سيء جداً"
+                        break;
+                }
+                channel.send("شكراً لتصويتك")
+                var voted = new Discord.RichEmbed()
+                voted.addField('Vote', hi)
+                voted.addField('Vote by', mentioned)
+                voted.addField('Vote to', message.author)
+                client.channels.get("593196184554700801").send(voted)
+            }).catch(() => {
+                mentioned.send('انتهى الوقت');
+            });
+        });
+    }
+});
+client.login("NTEzMDg2MjcwOTE0NjkxMDcz.XRKKRQ.1ec50_VPeiXIN5U1ZJpAA82_1F4")
