@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 const sql = require('sqlite');
 const path = require('path');
-var prefix = "@"
+var prefix = "c"
 sql.open(path.join(__dirname, 'credits.sql')) // read sql file
 .then(() => { // then ?
 	console.log('Opened') // if the sql opened
